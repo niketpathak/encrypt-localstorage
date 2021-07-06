@@ -5,5 +5,7 @@
  */
 
 import { isObject, NOOP } from './helpers';
+import ls from 'localstorage-slim';
+import sha256 from 'crypto-js/sha256';
 
 export const app = {};
