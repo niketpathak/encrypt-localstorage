@@ -76,6 +76,6 @@
   "dependencies": {
     "@types/crypto-js": "^4.0.1",
     "crypto-js": "^4.0.0",
-    "localstorage-slim": "^1.9.7"
+    "localstorage-slim": "^1.9.8"
   }
 }
