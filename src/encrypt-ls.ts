@@ -6,6 +6,9 @@
 
 import ls from 'localstorage-slim';
 import AES from 'crypto-js/aes';
+import tripleDES from 'crypto-js/tripledes';
+import Rc4Drop from 'crypto-js/rc4';
+import rabbit from 'crypto-js/rabbit';
 import encUTF8 from 'crypto-js/enc-utf8';
 
 const testObj = {
@@ -20,12 +23,15 @@ const testObj = {
   },
 };
 
+// Cipher to use
+const cipher = tripleDES; // AES / tripleDES / Rc4Drop / rabbit
+
 const testArr = ['Apple', 13, true, null, false, 14.5, { ironman: 'Tony Stark' }];
 
-ls.config.encrypter = (data, secret) => AES.encrypt(JSON.stringify(data), secret as string).toString();
+ls.config.encrypter = (data, secret) => cipher.encrypt(JSON.stringify(data), secret as string).toString();
 ls.config.decrypter = (data, secret) => {
   try {
-    return JSON.parse(AES.decrypt(data as string, secret as string).toString(encUTF8));
+    return JSON.parse(cipher.decrypt(data as string, secret as string).toString(encUTF8));
   } catch (e) {
     // incorrect secret, return the encrypted data instead / or null
     return data; // or return null;
