@@ -7,7 +7,7 @@
 import ls from 'localstorage-slim';
 import AES from 'crypto-js/aes';
 import tripleDES from 'crypto-js/tripledes';
-import Rc4Drop from 'crypto-js/rc4';
+import RC4 from 'crypto-js/rc4';
 import rabbit from 'crypto-js/rabbit';
 import encUTF8 from 'crypto-js/enc-utf8';
 
@@ -24,7 +24,7 @@ const testObj = {
 };
 
 // Cipher to use
-const cipher = tripleDES; // AES / tripleDES / Rc4Drop / rabbit
+const cipher = tripleDES; // AES / tripleDES / RC4 / rabbit
 
 const testArr = ['Apple', 13, true, null, false, 14.5, { ironman: 'Tony Stark' }];
 
@@ -37,6 +37,56 @@ ls.config.decrypter = (data, secret) => {
     return data; // or return null;
   }
 };
+
+const screenshotable = () => {
+  const data = {
+    superman: 'Clark Kent',
+    power: 100,
+  };
+  ls.set('data', data);
+  console.log('%c******** Standard case (No TTL, no Encryption) ********', 'background: #000; color: #e5e829');
+  console.log('ls.set("data", {superman: "Clark Kent", power: 100 });');
+  console.log('ls.get("data");', ls.get('data'));
+
+  console.log('\n%c******** TTL set to 5 secs ********', 'background: #000; color: #e5e829');
+  console.log('ls.set("data", {superman: "Clark Kent", power: 100 }, { ttl: 5 });');
+  console.log('ls.get("data");', ls.get('data'), '(Within 5 secs)');
+  console.log('ls.get("data");', null, '(After 5 seconds)');
+
+  console.log('\n%c******** Default encryption/obfuscation ********', 'background: #000; color: #e5e829');
+  ls.set('data', data, { encrypt: true });
+  console.log('ls.set("data", {superman: "Clark Kent", power: 100 }, { encrypt: true }); => ', ls.get('data'));
+  console.log('ls.get("data", { decrypt: true });', ls.get('data', { decrypt: true }));
+
+  console.log(
+    '\n%c******** Default encryption/obfuscation, custom secret ********',
+    'background: #000; color: #e5e829'
+  );
+  ls.set('data', data, { encrypt: true, secret: 89 });
+  console.log(
+    'ls.set("data", {superman: "Clark Kent", power: 100 }, { encrypt: true, secret: 89 }); => ',
+    ls.get('data')
+  );
+  console.log('ls.get("data", { decrypt: true , secret: 89});', ls.get('data', { decrypt: true, secret: 89 }));
+
+  console.log(
+    '\n%c******** Encryption via CryptoJS (requires updating encrypter()/decrypter() as per docs) ********',
+    'background: grey; color: orange'
+  );
+
+  console.log('\n%c******** Encryption algorithm - Rabbit ********', 'background: #000; color: #e5e829');
+  ls.set('data', data, { encrypt: true, secret: 'passphrase' });
+  console.log('ls.set("data", {superman: "Clark Kent", power: 100 }, { encrypt: true, secret: "passphrase" }); ');
+  console.log('localStorage.getItem("data") => ', localStorage.getItem('data'));
+  console.log(
+    'ls.get("data", { decrypt: true , secret: "passphrase"});',
+    ls.get('data', { decrypt: true, secret: 'passphrase' })
+  );
+
+  console.log('-------------------------------------------------------');
+};
+
+// screenshotable();
 
 ls.config.encrypt = true;
 ls.config.secret = 'secret-string';
