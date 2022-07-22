@@ -6,8 +6,8 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'encrypt-ls.js',
-    library: 'encrypt-ls',
-    libraryExport: 'encrypt-ls', // to export only the default fn
+    library: 'encrypt_ls',
+    libraryExport: 'encrypt_ls', // to export only the default fn
     libraryTarget: 'umd',
     globalObject: 'this',
   },

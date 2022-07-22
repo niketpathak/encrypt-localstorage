@@ -74,8 +74,8 @@
     "webpack-cli": "^4.1.0"
   },
   "dependencies": {
-    "@types/crypto-js": "^4.0.1",
-    "crypto-js": "^4.0.0",
-    "localstorage-slim": "^2.0.0"
+    "@types/crypto-js": "^4.1.1",
+    "crypto-js": "^4.1.1",
+    "localstorage-slim": "^2.3.0"
   }
 }
